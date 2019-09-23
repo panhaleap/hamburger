@@ -5,9 +5,9 @@ public class Hamburger {
     private double burgerBasePrice;
     private double additonalPrice;
     private double totalPrice;
-    private Item lettuce = new Item("lettuce", 0.3);
-    private Item tomato = new Item("tomato", 0.6);
-    private Item carrot = new Item("tomato", 0.5);
+    private Item lettuce = new Item("lettuce", 1);
+    private Item tomato = new Item("tomato", 1);
+    private Item carrot = new Item("carrot", 1);
     private String selectedItemsNames;
 
     public Hamburger(String burgerName, String rollType, String meatType, double burgerPrice) {
@@ -15,6 +15,8 @@ public class Hamburger {
         this.rollType = rollType;
         this.meatType = meatType;
         this.burgerBasePrice = burgerPrice;
+        setTotalPrice();
+        selectedItemsNames = selectedItemsNames == null? "You didn't choose any additional item!" : selectedItemsNames;
     }
 
     public String getBurgerName() {
@@ -78,7 +80,7 @@ public class Hamburger {
         selectedItemsNames =
                 (lettuce.getIsAdd()? lettuce.getItemName() + ", " : "")
                 + (tomato.getIsAdd()? tomato.getItemName() + ", " : "")
-                + (carrot.getIsAdd()? carrot.getItemName() : "");
+                + (carrot.getIsAdd()? carrot.getItemName() + ", ": "");
         return selectedItemsNames;
     }
 
@@ -86,12 +88,25 @@ public class Hamburger {
         this.selectedItemsNames = selectedItemsNames;
     }
 
-    public void getInvoice(){
+    public void prepareForInvoice(boolean isSubClass){
+        if(!isSubClass) {
+            getAdditonalPrice();
+            setTotalPrice();
+            getSelectedItemsNames();
+        }
+    }
+
+    public void getInvoice(boolean isSubClass){
+        if(!isSubClass) {
+            prepareForInvoice(isSubClass);
+        }
         System.out.println("======> You have ordered <=====");
         System.out.println("Burger Name: "+ burgerName);
         System.out.println("Burger Base Price: "+ burgerBasePrice);
-        System.out.println("Burger Additional Price: "+ additonalPrice);
-        System.out.println("Additonal Items: "+ selectedItemsNames);
+        System.out.println("Additional Price: "+ additonalPrice);
+        System.out.println("Additonal Items: "+ (selectedItemsNames.isBlank() || selectedItemsNames.isEmpty()?
+                            "You didn't choose any additional item!" : selectedItemsNames));
         System.out.println("Total Price: "+ getTotalPrice());
+        System.out.println();
     }
 }

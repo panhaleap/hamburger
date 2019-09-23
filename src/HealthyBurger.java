@@ -1,10 +1,18 @@
 public class HealthyBurger extends Hamburger {
     private Item redOnion = new Item("red onion", 1);
-    private Item parsley = new Item("parsley", 0.1);
+    private Item parsley = new Item("parsley", 1);
     private double additonalPrice;
 
     public HealthyBurger(String meatType, double burgerPrice) {
         super("Healthy Burger", "Brown Rye Bread", meatType, burgerPrice);
+    }
+
+    public Item getRedOnion() {
+        return redOnion;
+    }
+
+    public Item getParsley() {
+        return parsley;
     }
 
     public void setAdditonalItems(boolean isLettuceAdd, boolean isTomatoAdd, boolean isCarrotAdd, boolean isRedOnionAdd, boolean isParsleyAdd){
@@ -26,7 +34,7 @@ public class HealthyBurger extends Hamburger {
     public String getSelectedItemsNames() {
         String selectedItemNames =
                 (redOnion.getIsAdd()? redOnion.getItemName() + ", " : "") +
-                (parsley.getIsAdd()? parsley.getItemName() : "");
+                (parsley.getIsAdd()? parsley.getItemName() + ", ": "");
         return super.getSelectedItemsNames() + ", " + selectedItemNames;
     }
 
@@ -38,5 +46,18 @@ public class HealthyBurger extends Hamburger {
     @Override
     public double getAdditonalPrice() {
         return additonalPrice;
+    }
+
+    @Override
+    public void prepareForInvoice(boolean isSubClass) {
+        setAdditonalPrice();
+        setTotalPrice();
+        setSelectedItemsNames("");
+    }
+
+    @Override
+    public void getInvoice(boolean isSubClass) {
+        prepareForInvoice(true);
+        super.getInvoice(true);
     }
 }
